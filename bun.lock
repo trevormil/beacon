@@ -44,6 +44,10 @@
         "@types/bun": "1.1.13",
       },
     },
+    "packages/widget": {
+      "name": "@beacon/widget",
+      "version": "0.0.0",
+    },
   },
   "packages": {
     "@beacon/cli": ["@beacon/cli@workspace:packages/cli"],
@@ -51,6 +55,8 @@
     "@beacon/server": ["@beacon/server@workspace:packages/server"],
 
     "@beacon/shared": ["@beacon/shared@workspace:packages/shared"],
+
+    "@beacon/widget": ["@beacon/widget@workspace:packages/widget"],
 
     "@hono/zod-validator": ["@hono/zod-validator@0.4.1", "", { "peerDependencies": { "hono": ">=3.9.0", "zod": "^3.19.1" } }, "sha512-I8LyfeJfvVmC5hPjZ2Iij7RjexlgSBT7QJudZ4JvNPLxn0JQ3sqclz2zydlwISAnw21D2n4LQ0nfZdoiv9fQQA=="],
 

@@ -1,0 +1,12 @@
+{
+  "name": "@beacon/widget",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "scripts": {
+    "build": "bun build.ts",
+    "dev": "bun build.ts --watch --serve",
+    "typecheck": "tsc --noEmit"
+  }
+}

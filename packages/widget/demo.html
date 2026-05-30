@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Beacon widget demo</title>
+    <style>
+      body {
+        font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, sans-serif;
+        margin: 0;
+        background: #f6f7fb;
+        color: #1a1a1a;
+      }
+      main {
+        max-width: 720px;
+        margin: 64px auto;
+        padding: 0 24px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+      }
+      p {
+        color: #4b5563;
+      }
+      code {
+        background: #eef0f6;
+        padding: 1px 6px;
+        border-radius: 6px;
+        font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      .palette {
+        display: flex;
+        gap: 10px;
+        margin-top: 28px;
+      }
+      .swatch {
+        display: inline-block;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Beacon widget demo</h1>
+      <p>
+        Click the bubble bottom-right. Customize via <code>data-*</code> attrs on the script tag,
+        or click a swatch below to swap colors live.
+      </p>
+      <div class="palette">
+        <span class="swatch" style="background: #2b8fdb" data-c="#2b8fdb" title="Beacon blue"></span>
+        <span class="swatch" style="background: #10b981" data-c="#10b981" title="Emerald"></span>
+        <span class="swatch" style="background: #f59e0b" data-c="#f59e0b" title="Amber"></span>
+        <span class="swatch" style="background: #ef4444" data-c="#ef4444" title="Red"></span>
+        <span class="swatch" style="background: #8b5cf6" data-c="#8b5cf6" title="Purple"></span>
+        <span class="swatch" style="background: #111827" data-c="#111827" title="Slate"></span>
+      </div>
+    </main>
+
+    <!-- The widget. data-endpoint points to a running Beacon API; data-project is the public key. -->
+    <script
+      src="/beacon.js"
+      data-project="pub_DEMO_KEY"
+      data-endpoint="http://localhost:4747"
+      data-primary="#2b8fdb"
+      data-title="Send feedback"
+      defer
+    ></script>
+
+    <script>
+      document.querySelectorAll(".swatch").forEach((el) => {
+        el.addEventListener("click", () => {
+          const c = el.getAttribute("data-c");
+          // Re-mount the widget with the new color: easiest demo path.
+          const old = document.getElementById("beacon-root");
+          if (old) old.remove();
+          const s = document.createElement("script");
+          s.src = "/beacon.js?" + Date.now();
+          s.dataset.project = "pub_DEMO_KEY";
+          s.dataset.endpoint = "http://localhost:4747";
+          s.dataset.primary = c;
+          s.dataset.title = "Send feedback";
+          s.defer = true;
+          document.body.appendChild(s);
+        });
+      });
+    </script>
+  </body>
+</html>
