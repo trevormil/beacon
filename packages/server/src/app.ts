@@ -6,7 +6,7 @@ import {
   safeEqual,
   type BeaconDal,
   type Project,
-} from "@beacon/shared";
+} from "@trevormil/beacon-shared";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";

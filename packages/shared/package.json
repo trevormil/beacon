@@ -1,11 +1,26 @@
 {
-  "name": "@beacon/shared",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@trevormil/beacon-shared",
+  "version": "0.1.0",
+  "description": "Beacon — shared types, DAL interface, and 4 driver adapters (Postgres/MySQL/SQLite/Mongo).",
+  "license": "MIT",
+  "author": "Trevor Miller",
+  "homepage": "https://github.com/trevormil/beacon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevormil/beacon.git",
+    "directory": "packages/shared"
+  },
   "type": "module",
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"

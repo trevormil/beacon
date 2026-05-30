@@ -9,15 +9,21 @@ const program = new Command();
 program
   .name("beacon")
   .description("Beacon — embeddable feedback widget that pipelines into tickets + MRs")
-  .version("0.0.0");
+  .version("0.1.0");
 
-// ─── serve ─────────────────────────────────────────────────────────────────
+// ─── serve (pointer; server lives in a separate package) ──────────────────
 
 program
   .command("serve")
-  .description("Start the Beacon API server")
-  .action(async () => {
-    await import("@beacon/server");
+  .description("Pointer to the server package — Beacon's API lives there")
+  .action(() => {
+    console.error("Beacon's API server is published as a separate package.");
+    console.error("");
+    console.error("  bunx @trevormil/beacon-server");
+    console.error("");
+    console.error("Or, to self-host with docker compose / kubernetes,");
+    console.error("clone github.com/trevormil/beacon and follow docs/self-host.md.");
+    process.exit(2);
   });
 
 // ─── poll ──────────────────────────────────────────────────────────────────
@@ -165,7 +171,7 @@ admin
       console.log(`  secret key:  ${result.secret}     ← shown once, store it now`);
       console.log("\nembed snippet:");
       console.log(
-        `  <script src="https://cdn.../beacon.js" data-project="${result.publicKey}" data-endpoint="${opts.endpoint}" defer></script>`,
+        `  <script src="https://cdn.jsdelivr.net/npm/@trevormil/beacon-widget/dist/beacon.js" data-project="${result.publicKey}" data-endpoint="${opts.endpoint}" defer></script>`,
       );
     },
   );

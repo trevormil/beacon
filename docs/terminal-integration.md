@@ -9,7 +9,7 @@ For each unprocessed feedback item in your Beacon project:
 1. Reads the message, captured URL, user-agent, and (if provided) the user's email.
 2. Files **one backlog ticket** via the project's `/ticket` skill — title, type, priority, full description including the raw feedback and follow-up email.
 3. Groups several related feedback items into one ticket when they rhyme into the same underlying bug.
-4. Marks each item processed via `bunx @beacon/cli mark` so the next run won't re-file it.
+4. Marks each item processed via `bunx @trevormil/beacon mark` so the next run won't re-file it.
 
 It **does not** edit code or open PRs. The `/factory` agent picks up the tickets it files and turns them into MRs.
 
@@ -29,10 +29,10 @@ Pick whichever fits — env vars for CI, `~/.config/beacon/config.json` for a pe
 # Spin up your Beacon instance (or use a hosted one)
 DATABASE_URL=file:./data.db \
 ADMIN_TOKEN=$(openssl rand -hex 32) \
-  bunx @beacon/cli serve
+  bunx @trevormil/beacon-server
 
 # In another shell — create the project for this repo
-bunx @beacon/cli admin create-project \
+bunx @trevormil/beacon admin create-project \
   --slug my-app \
   --origins https://my.app,https://staging.my.app \
   --repo trevormil/my-app \
@@ -55,7 +55,7 @@ EOF
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/@beacon/widget/dist/beacon.js"
+  src="https://cdn.jsdelivr.net/npm/@trevormil/beacon-widget/dist/beacon.js"
   data-project="pub_xxx"
   data-endpoint="http://localhost:4747"
   defer
@@ -93,7 +93,7 @@ Add to `~/.config/TerMinal/widgets.json`:
       "id": "beacon-pending",
       "title": "Pending feedback",
       "icon": "RadioTower",
-      "command": "bunx @beacon/cli poll --project my-app --secret $BEACON_SECRET --status new --limit 200 | wc -l",
+      "command": "bunx @trevormil/beacon poll --project my-app --secret $BEACON_SECRET --status new --limit 200 | wc -l",
       "intervalMs": 30000,
       "mode": "big"
     }

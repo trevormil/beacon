@@ -6,7 +6,7 @@ The widget is a ~8 KB IIFE bundle that drops a feedback bubble into any web app.
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/@beacon/widget/dist/beacon.js"
+  src="https://cdn.jsdelivr.net/npm/@trevormil/beacon-widget/dist/beacon.js"
   data-project="pub_your_public_key"
   data-endpoint="https://beacon.example.com"
   defer
@@ -44,7 +44,7 @@ The widget mounts in a closed Shadow DOM — your page's CSS won't bleed in, and
 If you want every embed to share the same brand styling without copy-pasting attributes, store the defaults server-side. They're set at project creation and apply to all embeds:
 
 ```bash
-bunx @beacon/cli admin create-project \
+bunx @trevormil/beacon admin create-project \
   --slug my-app \
   --origins https://my.app \
   --primary "#10b981" \

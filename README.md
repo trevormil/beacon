@@ -50,15 +50,16 @@ The same `bunx beacon process` command works with **codex**, **claude**, **gemin
 
 | Package           | What it is                                                  | Size           |
 | ----------------- | ----------------------------------------------------------- | -------------- |
-| `@beacon/widget`  | Embeddable bottom-right bubble &mdash; vanilla TS, Shadow DOM | **7.8 KB** IIFE |
-| `@beacon/server`  | Hono + Bun API with 3-tier auth (public / secret / admin)   | one file       |
-| `@beacon/cli`     | `bunx beacon serve | poll | mark | process | admin`         | one binary     |
+| `@trevormil/beacon-widget`  | Embeddable bottom-right bubble &mdash; vanilla TS, Shadow DOM | **7.8 KB** IIFE |
+| `@trevormil/beacon-server`  | Hono + Bun API with 3-tier auth (public / secret / admin)   | one file       |
+| `@trevormil/beacon`     | `bunx beacon poll \| mark \| process \| admin`              | one binary     |
+| `@trevormil/beacon-server` | `bunx @trevormil/beacon-server` &mdash; Bun runtime, no Docker needed | one binary |
 
 ## Quickstart &mdash; embed
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/@beacon/widget/dist/beacon.js"
+  src="https://cdn.jsdelivr.net/npm/@trevormil/beacon-widget/dist/beacon.js"
   data-project="pub_your_public_key"
   data-endpoint="https://beacon.example.com"
   defer
@@ -70,19 +71,16 @@ That's the entire integration. A bubble appears bottom-right; clicks open a slid
 ## Quickstart &mdash; self-host (SQLite, no Docker)
 
 ```bash
-git clone https://github.com/trevormil/beacon
-cd beacon && bun install
-
 export ADMIN_TOKEN=$(openssl rand -hex 32)
 export DATABASE_URL=file:./data.db
-bun --cwd packages/server run start
+bunx @trevormil/beacon-server
 # beacon: listening on http://0.0.0.0:4747
 ```
 
 Create your first project:
 
 ```bash
-bun packages/cli/src/index.ts admin create-project \
+bunx @trevormil/beacon admin create-project \
   --slug my-app \
   --origins https://my.app,https://staging.my.app \
   --admin-token $ADMIN_TOKEN
@@ -93,7 +91,7 @@ Prints `pub_…` (for the widget) and `sec_…` (for the CLI poller &mdash; show
 ## Quickstart &mdash; pipe feedback into your repo
 
 ```bash
-bunx @beacon/cli process \
+bunx @trevormil/beacon process \
   --project my-app \
   --secret  sec_… \
   --repo    ~/code/my-app \
@@ -124,7 +122,7 @@ bunx @beacon/cli process \
 ### Server-side defaults (set once at project creation)
 
 ```bash
-bunx @beacon/cli admin create-project \
+bunx @trevormil/beacon admin create-project \
   --slug my-app \
   --origins https://my.app \
   --primary "#10b981" \
@@ -244,7 +242,7 @@ No screenshots. No cookies. No session replay. No fingerprinting. No third-party
 - [ ] Email notifications on new feedback (as a stock `--command` recipe)
 - [ ] Redis-backed rate limiter (multi-replica deploys)
 - [ ] `update-project` / `revoke-secret` admin commands
-- [ ] Official npm publish of `@beacon/widget` + `@beacon/cli`
+- [ ] Official npm publish of `@trevormil/beacon-widget` + `@trevormil/beacon`
 
 ## Contributing
 

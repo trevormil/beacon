@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createDal, type BeaconDal } from "@beacon/shared";
+import { createDal, type BeaconDal } from "@trevormil/beacon-shared";
 import { createApp } from "./app";
 import type { Config } from "./config";
 

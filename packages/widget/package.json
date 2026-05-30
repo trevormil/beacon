@@ -1,12 +1,39 @@
 {
-  "name": "@beacon/widget",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@trevormil/beacon-widget",
+  "version": "0.1.0",
+  "description": "Beacon — embeddable feedback widget. ~8KB Shadow-DOM bubble that pipes feedback into tickets + MRs.",
+  "license": "MIT",
+  "author": "Trevor Miller",
+  "homepage": "https://github.com/trevormil/beacon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevormil/beacon.git",
+    "directory": "packages/widget"
+  },
+  "keywords": [
+    "feedback",
+    "widget",
+    "embed",
+    "crisp-alternative",
+    "intercom-alternative",
+    "self-hosted"
+  ],
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/beacon.js",
+  "browser": "./dist/beacon.js",
+  "unpkg": "./dist/beacon.js",
+  "jsdelivr": "./dist/beacon.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "bun build.ts",
     "dev": "bun build.ts --watch --serve",
+    "prepublishOnly": "bun build.ts",
     "typecheck": "tsc --noEmit"
   }
 }

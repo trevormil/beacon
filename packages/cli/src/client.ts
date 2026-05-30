@@ -1,4 +1,4 @@
-import type { Feedback } from "@beacon/shared";
+import type { Feedback } from "@trevormil/beacon-shared";
 
 export class BeaconClient {
   constructor(

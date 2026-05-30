@@ -1,4 +1,4 @@
-import { createDal } from "@beacon/shared";
+import { createDal } from "@trevormil/beacon-shared";
 import { createApp } from "./app";
 import { loadConfig } from "./config";
 

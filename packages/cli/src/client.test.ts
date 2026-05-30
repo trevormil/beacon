@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { createDal, type BeaconDal } from "@beacon/shared";
-import { createApp } from "@beacon/server/src/app";
-import type { Config } from "@beacon/server/src/config";
+import { createDal, type BeaconDal } from "@trevormil/beacon-shared";
+import { createApp } from "@trevormil/beacon-server/src/app";
+import type { Config } from "@trevormil/beacon-server/src/config";
 import { AdminClient, BeaconClient } from "./client";
 
 const ADMIN = "test-admin-cli-token";

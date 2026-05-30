@@ -60,7 +60,7 @@ Then create your first project as in path 1, but with `--endpoint http://localho
 
 ### Switching DB later
 
-Run `bunx @beacon/cli admin list-projects` against your existing instance to grab the project list, then re-create them against the new instance. Feedback rows don't migrate automatically — this is the simplest path for tools at the "feedback widget" scale (thousands per project, not millions).
+Run `bunx @trevormil/beacon admin list-projects` against your existing instance to grab the project list, then re-create them against the new instance. Feedback rows don't migrate automatically — this is the simplest path for tools at the "feedback widget" scale (thousands per project, not millions).
 
 ## 3. Production deployment (your VPS + managed Postgres)
 
@@ -84,14 +84,14 @@ beacon.yourdomain.com {
 - **Backups**: Postgres / MySQL / Mongo handle this themselves. For SQLite, snapshot `data.db` periodically (`sqlite3 data.db ".backup '/path/backup.db'"`).
 - **Rate limiting** is in-process (per-IP, per-project, sliding window). Tune via `RATE_LIMIT_WINDOW_MS` and `RATE_LIMIT_MAX` env vars. For multi-instance deploys you'll want a Redis-backed limiter — not built yet; open an issue.
 - **Origin allowlist** is per-project; set via `--origins` at create time. To update later, recreate the project (no `update-project` command yet).
-- **Secret rotation**: revoke a secret with `bunx @beacon/cli admin revoke-secret <id>` (planned, not shipped — current path is to recreate the project).
+- **Secret rotation**: revoke a secret with `bunx @trevormil/beacon admin revoke-secret <id>` (planned, not shipped — current path is to recreate the project).
 - **CORS** is permissive by design — origin checks happen in app logic against the per-project allowlist, not at the CORS layer.
 
 ## What's NOT included
 
 - A dashboard UI for managing projects. Use the admin CLI.
 - User accounts / multi-user auth. ADMIN_TOKEN is one-token-fits-all.
-- Email notifications on new feedback. Build it as a process step: `bunx @beacon/cli process --command "send-email {feedback.message}"`.
+- Email notifications on new feedback. Build it as a process step: `bunx @trevormil/beacon process --command "send-email {feedback.message}"`.
 - Image upload / screenshots. Open an issue if you want this.
 
 All of the above are good follow-up tickets; PRs welcome.

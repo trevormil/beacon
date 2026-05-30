@@ -63,7 +63,7 @@ curl https://beacon.trevormil.com/healthz
 
 # Create your first project
 ADMIN=$(kubectl -n beacon get secret beacon-env -o jsonpath='{.data.ADMIN_TOKEN}' | base64 -d)
-bunx @beacon/cli admin create-project \
+bunx @trevormil/beacon admin create-project \
   --endpoint https://beacon.trevormil.com \
   --admin-token "$ADMIN" \
   --slug autopilot-harness \

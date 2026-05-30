@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import type { Feedback } from "@beacon/shared";
+import type { Feedback } from "@trevormil/beacon-shared";
 import { renderTemplate } from "./template";
 
 const sample: Feedback = {

@@ -1,19 +1,44 @@
 {
-  "name": "@beacon/cli",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@trevormil/beacon",
+  "version": "0.1.0",
+  "description": "Beacon — embeddable feedback widget that pipelines into tickets + MRs. CLI client for poll / mark / process / admin.",
+  "license": "MIT",
+  "author": "Trevor Miller",
+  "homepage": "https://github.com/trevormil/beacon",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trevormil/beacon.git",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "feedback",
+    "widget",
+    "tickets",
+    "crisp-alternative",
+    "intercom-alternative",
+    "self-hosted"
+  ],
   "type": "module",
   "main": "./src/index.ts",
   "bin": {
     "beacon": "./src/index.ts"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "start": "bun src/index.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@beacon/server": "workspace:*",
-    "@beacon/shared": "workspace:*",
+    "@trevormil/beacon-shared": "workspace:*",
     "commander": "12.1.0"
+  },
+  "devDependencies": {
+    "@trevormil/beacon-server": "workspace:*"
   }
 }

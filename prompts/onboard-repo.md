@@ -205,7 +205,7 @@ Read the embed target chosen in step 1. Insert this block exactly once &mdash; v
 
 ```html
 <script
-  src="https://cdn.jsdelivr.net/npm/@beacon/widget/dist/beacon.js"
+  src="https://cdn.jsdelivr.net/npm/@trevormil/beacon-widget/dist/beacon.js"
   data-project="REPLACE_PUBLIC_KEY"
   data-endpoint="REPLACE_ENDPOINT"
   data-primary="REPLACE_PRIMARY"
@@ -333,7 +333,7 @@ jobs:
           BEACON_ENDPOINT: ${{ secrets.BEACON_ENDPOINT }}
           BEACON_SECRET:   ${{ secrets.BEACON_SECRET }}
         run: |
-          bunx @beacon/cli process \
+          bunx @trevormil/beacon process \
             --project "$(jq -r .slug .beacon/config.json)" \
             --repo    . \
             --command 'codex exec -C {repo} "/ticket {feedback.message}\n/pr-creation"'
@@ -343,7 +343,7 @@ Add `BEACON_ENDPOINT` and `BEACON_SECRET` as GitHub Actions repo secrets.
 
 ### Cron / launchd / systemd
 
-Any scheduler that can run `bunx @beacon/cli process` periodically works the same way. The agent CLI is the universal entry point.
+Any scheduler that can run `bunx @trevormil/beacon process` periodically works the same way. The agent CLI is the universal entry point.
 
 ---
 
