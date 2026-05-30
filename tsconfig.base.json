@@ -14,6 +14,6 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "verbatimModuleSyntax": false,
-    "types": ["bun-types"]
+    "types": ["bun"]
   }
 }
