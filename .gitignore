@@ -1,0 +1,20 @@
+node_modules/
+dist/
+out/
+build/
+
+# env / secrets
+.env
+.env.*
+!.env.example
+
+# local data
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+data/
+
+# logs
+*.log
+.DS_Store

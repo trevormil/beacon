@@ -1,0 +1,26 @@
+{
+  "name": "beacon",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Embeddable feedback widget that pipelines user feedback into tickets + MRs.",
+  "license": "MIT",
+  "author": "Trevor Miller",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/trevormil/beacon.git"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:server": "bun --cwd packages/server run dev",
+    "build:widget": "bun --cwd packages/widget run build",
+    "cli": "bun packages/cli/src/index.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.3.3",
+    "typescript": "5.6.3"
+  }
+}
