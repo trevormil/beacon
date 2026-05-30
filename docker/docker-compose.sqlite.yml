@@ -1,0 +1,18 @@
+services:
+  beacon:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DATABASE_URL: file:/data/beacon.db
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?set ADMIN_TOKEN in your .env}
+      HOST: 0.0.0.0
+      PORT: 4747
+    volumes:
+      - beacon-sqlite-data:/data
+    ports:
+      - "${BEACON_PORT:-4747}:4747"
+    restart: unless-stopped
+
+volumes:
+  beacon-sqlite-data:

@@ -1,0 +1,37 @@
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: beacon
+      MYSQL_USER: beacon
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootchangeme}
+    volumes:
+      - beacon-mysql-data:/var/lib/mysql
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pbeacon"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  beacon:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      DATABASE_URL: mysql://beacon:${MYSQL_PASSWORD:-changeme}@mysql:3306/beacon
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?set ADMIN_TOKEN in your .env}
+      HOST: 0.0.0.0
+      PORT: 4747
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "${BEACON_PORT:-4747}:4747"
+    restart: unless-stopped
+
+volumes:
+  beacon-mysql-data:
