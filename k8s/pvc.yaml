@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: beacon-data
+  namespace: beacon
+spec:
+  accessModes: [ReadWriteOnce]
+  resources: { requests: { storage: 1Gi } }
+  # DigitalOcean default block-storage class. 1Gi covers ~hundreds of thousands
+  # of feedback rows including indexes; bump if hosted across many projects.

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beacon
+  namespace: beacon
+spec:
+  # replicas=1: bun:sqlite is file-backed + single-writer. Scale-out requires
+  # moving DATABASE_URL to Postgres / MySQL / Mongo.
+  replicas: 1
+  strategy: { type: Recreate }
+  selector: { matchLabels: { app: beacon } }
+  template:
+    metadata: { labels: { app: beacon } }
+    spec:
+      # oven/bun:alpine runs as uid=1000 gid=1000; fsGroup gives bun write
+      # access to the mounted PVC so it can create beacon.db + WAL.
+      securityContext:
+        fsGroup: 1000
+      imagePullSecrets:
+        - name: ghcr-pull
+      containers:
+        - name: beacon
+          image: ghcr.io/trevormil/beacon:latest
+          imagePullPolicy: Always
+          ports: [{ containerPort: 4747 }]
+          envFrom:
+            - secretRef: { name: beacon-env }
+          env:
+            - { name: DATABASE_URL, value: "file:/data/beacon.db" }
+            - { name: HOST, value: "0.0.0.0" }
+            - { name: PORT, value: "4747" }
+            - { name: RATE_LIMIT_WINDOW_MS, value: "60000" }
+            - { name: RATE_LIMIT_MAX, value: "20" }
+          volumeMounts:
+            - { name: data, mountPath: /data }
+          readinessProbe:
+            httpGet: { path: /healthz, port: 4747 }
+            initialDelaySeconds: 2
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /healthz, port: 4747 }
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 256Mi }
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: beacon-data }

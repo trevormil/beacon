@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: beacon
+  namespace: beacon
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # Widget POSTs include a JSON body up to ~10 KB; permissive cap.
+    nginx.ingress.kubernetes.io/proxy-body-size: "64k"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [beacon.trevormil.com]
+      secretName: beacon-trevormil-tls
+  rules:
+    - host: beacon.trevormil.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: beacon
+                port:
+                  number: 80
