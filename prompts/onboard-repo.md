@@ -13,7 +13,7 @@ Resolve these from the environment, in order:
 | Name              | Env var / source                          | Fallback                                        |
 | ----------------- | ----------------------------------------- | ----------------------------------------------- |
 | `BEACON_ENDPOINT` | env, then `~/.config/beacon/config.json:endpoint` | `https://beacon.trevormil.com`             |
-| `BEACON_ADMIN_TOKEN` | env, then `~/.secrets/beacon-admin-token` (chmod 600) | **fail with a clear message** if unset |
+| `BEACON_ADMIN_TOKEN` | env, then `~/.secrets/beacon-admin-token`, then `~/.config/beacon/admin-token`, then `~/CompSci/gauntlet/autopilot-harness/.secrets/beacon-admin-token` (all chmod 600) | **fail with a clear message** if none of them exist |
 | `REPO_ROOT`       | `git rev-parse --show-toplevel`           | current working directory                       |
 | `REPO_SLUG`       | derived from git remote `origin/<host>/<owner>/<name>` | basename of `REPO_ROOT`            |
 | `DEPLOY_ORIGINS`  | comma-separated, from `--origins` arg     | inferred (see step 2)                           |
@@ -25,7 +25,7 @@ Never echo `BEACON_ADMIN_TOKEN` to stdout, logs, or commit messages.
 
 ## Step 0 &mdash; verify the Beacon endpoint is live
 
-Treat the endpoint as a service contract. Don't skip.
+Treat the endpoint as a service contract. Don't skip. **`curl` is the source of truth.** Do not pre-check with `host` / `dig` / `nslookup` &mdash; stale negative caches (especially on macOS's mDNSResponder) make those tools return NXDOMAIN long after DNS has propagated globally. A successful TLS handshake from `curl` proves DNS resolved AND the cert is valid; nothing else needs to pass.
 
 ```bash
 ENDPOINT="${BEACON_ENDPOINT:-https://beacon.trevormil.com}"
@@ -46,17 +46,23 @@ done
 echo "beacon: endpoint live at $ENDPOINT"
 ```
 
-If `$ENDPOINT` is HTTPS and curl reports `SSL_ERROR` / cert errors, that means the cert is still issuing &mdash; keep polling. **Don't** fall back to `-k` (insecure). If 30 minutes pass with cert errors, the cert is probably stuck; file a ticket and stop.
+If `curl` reports `SSL_ERROR` / cert errors, the cert is still issuing &mdash; keep polling. **Don't** fall back to `-k` (insecure). If 30 minutes pass with cert errors, the cert is probably stuck; file a ticket and stop.
 
-For a brand-new Beacon deployment, you may also need to poll the DNS:
+### Diagnosing apparent DNS failure
+
+If the agent's curl loop fails AND the operator suspects DNS, run the **authoritative-resolver bypass** to disambiguate:
 
 ```bash
-# Optional pre-check before the healthz loop
-host "${ENDPOINT#https://}" || {
-  echo "beacon: DNS not propagated for ${ENDPOINT#https://}" >&2
-  echo "beacon: the cluster admin owns this; waiting before continuing" >&2
-}
+# Query DigitalOcean / Cloudflare / Google directly — bypasses any local cache.
+dig +short @1.1.1.1 "${ENDPOINT#https://}"
+dig +short @8.8.8.8 "${ENDPOINT#https://}"
+
+# Or use curl's own resolver override to hit the ingress directly:
+INGRESS_IP=$(dig +short @1.1.1.1 "${ENDPOINT#https://}" | head -1)
+curl -sf --resolve "${ENDPOINT#https://}:443:$INGRESS_IP" "$ENDPOINT/healthz"
 ```
+
+If those work and the naked `curl` doesn't, the operator's local resolver is stale. On macOS the fix is `sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder`. Until that runs, the agent should keep using the `--resolve` override.
 
 ---
 
